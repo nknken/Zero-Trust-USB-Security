@@ -1,7 +1,7 @@
 <div align="center">
 
 # 🔒 Zero Trust USB Security
-Alat keamanan USB real-time yang mendeteksi, menganalisis, dan otomatis memblokir perangkat HID tidak sah (serangan BadUSB / Rubber Ducky) menggunakan analisis perilaku dan model Zero Trust berbasis whitelist.
+Alat keamanan USB real-time yang mendeteksi, menganalisis, dan otomatis memblokir perangkat HID tidak sah perangkat HID otomatis (BadUSB/Rubber Ducky simulation) menggunakan analisis perilaku dan model Zero Trust berbasis whitelist.
 
 </div>
 
@@ -9,7 +9,6 @@ Alat keamanan USB real-time yang mendeteksi, menganalisis, dan otomatis membloki
 
 ## 📋 Daftar Isi
 - [Fitur](#-fitur)
-- [Cara Kerja](#-cara-kerja)
 - [Persyaratan](#-persyaratan)
 - [Instalasi](#-instalasi)
 - [Cara Penggunaan](#-cara-penggunaan)
@@ -25,38 +24,14 @@ Alat keamanan USB real-time yang mendeteksi, menganalisis, dan otomatis membloki
 |---|---|
 | 🛡️ **Model Zero Trust** | Setiap USB baru dianggap tidak aman sampai didaftarkan ke whitelist |
 | 🔍 **Analisis Perilaku Real-time** | Memantau interval ketikan, CV, dan burst rate untuk mendeteksi input otomatis |
-| ⚡ **Auto Emergency Block** | Langsung menonaktifkan dan menghapus perangkat mencurigakan dari sistem |
-| 💥 **Gangguan Payload** | Menyuntikkan karakter acak untuk merusak payload serangan yang sedang berjalan |
+| ⚡ **Automatic HID Blocking** | Menonaktifkan dan menghapus perangkat mencurigakan dari sistem jika mencurigakan |
+| 💥 **Input Interruption** | Menyisipkan input acak untuk menghentikan eksekusi payload otomatis |
 | 🖥️ **Dashboard GUI** | Tampilan dashboard gelap yang bersih untuk memantau status, log, dan mengelola perangkat |
 | 📋 **Whitelist / Blacklist** | Daftar perangkat tepercaya dan terblokir yang tersimpan permanen |
 | 📁 **Arsip Log Otomatis** | Log keyboard harian dan log USB mingguan diarsipkan ke ZIP secara otomatis |
 | 🔄 **Setup First Run** | Wizard interaktif untuk mendaftarkan perangkat tepercaya sebelum monitoring dimulai |
 
 ---
-
-## 🔬 Cara Kerja
-
-```
-USB Dicolokkan
-      │
-      ▼
-┌─────────────────────┐
-│  Cek Zero Trust     │  ── Ada di Whitelist? ──► TRUSTED (diizinkan)
-└─────────────────────┘
-      │ Tidak
-      ▼
-┌─────────────────────┐
-│  PENDING / DIPANTAU │  ◄── Analisis perilaku berjalan
-└─────────────────────┘
-      │ Score ≥ 4
-      ▼
-┌────────────────────────────────────────────┐
-│  RESPONS DARURAT                           │
-│  1. Suntik karakter acak (rusak payload)   │   │
-│  2. Disable & hapus perangkat (PnP)        │
-│  3. Tulis ke blacklist                     │
-└────────────────────────────────────────────┘
-```
 
 **Sistem Penilaian Perilaku:**
 
@@ -90,7 +65,7 @@ USB Dicolokkan
 1. Buka halaman [Releases](https://github.com/nknken/Zero-Trust-USB-Security/releases)
 2. Download `.zip` versi terbaru
 3. Ekstrak ke folder (contoh: `C:\ZeroTrustUSB\`)
-4. Jalankan `Run-GUI.bat` — UAC akan muncul otomatis, klik **Yes**
+4. Jalankan `Run-GUI.bat`
 
 ### Opsi 2 — Clone Repository
 
@@ -99,7 +74,7 @@ git clone https://github.com/nknken/Zero-Trust-USB-Security.git
 cd Zero-Trust-USB-Security
 ```
 
-Lalu jalankan `Run-GUI.bat` — UAC akan muncul otomatis, klik **Yes**.
+Lalu jalankan `Run-GUI.bat`.
 
 > ⚠️ **Jangan memindahkan file secara terpisah.** Struktur folder harus tetap utuh agar aplikasi berjalan dengan benar.
 
@@ -186,8 +161,8 @@ Zero-Trust-USB-Security/
 │
 ├── main.ps1                  # Engine monitoring utama
 ├── gui.ps1                   # Dashboard GUI
-├── Run-GUI.bat               # Jalankan GUI (sebagai Admin)
-├── Run-CLI.bat               # Jalankan monitor CLI (sebagai Admin)
+├── Run-GUI.bat               # Jalankan GUI 
+├── Run-CLI.bat               # Jalankan monitor CLI 
 │
 ├── modules/
 │   ├── usb_detector.ps1      # Deteksi USB HID & logging
@@ -211,20 +186,14 @@ Zero-Trust-USB-Security/
 **T: Apakah ini akan memblokir keyboard/mouse saya sendiri?**
 > Tidak — selama Anda mendaftarkannya saat First Run Setup. Whitelist tersimpan permanen dan tidak hilang setelah restart.
 
-**T: Apa itu serangan BadUSB / Rubber Ducky?**
-> Perangkat yang menyamar sebagai keyboard untuk mengetik perintah berbahaya secara otomatis (misalnya membuka PowerShell dan menjalankan script) begitu dicolokkan ke komputer.
-
-**T: Kenapa muncul UAC (User Account Control) saat membuka aplikasi?**
-> Aplikasi membutuhkan hak Administrator untuk menonaktifkan perangkat PnP dan menghentikan proses sistem. UAC diminta otomatis — cukup klik **Yes**.
-
 **T: Saya tidak sengaja memblokir keyboard saya. Apa yang harus dilakukan?**
 > Gunakan keyboard lain atau on-screen keyboard (`Win + Ctrl + O`), lalu jalankan `Run-CLI.bat` dan pilih menu **3. Unblock Perangkat**, masukkan `VID:PID` perangkat tersebut. Atau buka GUI dan gunakan tombol **Unblock**.
 
 **T: Di mana log disimpan?**
 > Di folder `logs\` di dalam direktori aplikasi. Klik tombol **"Buka Folder"** di GUI untuk membukanya langsung.
 
-**T: Monitor menampilkan "TIDAK AKTIF" setelah dibuka.**
-> Pastikan klik **Yes** saat UAC muncul. Jika UAC tidak muncul sama sekali, coba klik kanan `Run-GUI.bat` → *Run as administrator*.
+**T: Monitor tidak aktif setelah dibuka.**
+> Monitor tidak aktif?, coba klik kanan `Run-GUI.bat` → *Run as administrator*.
 
 ---
 
