@@ -14,7 +14,6 @@ if ($MyInvocation.MyCommand.CommandType -eq 'ExternalScript') {
 } elseif ($PSScriptRoot -and (Test-Path $PSScriptRoot)) {
     $base = $PSScriptRoot
 } else {
-    # Fallback untuk .exe — ambil dari lokasi executable itu sendiri
     $base = Split-Path -Parent ([System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName)
 }
 Set-Location $base

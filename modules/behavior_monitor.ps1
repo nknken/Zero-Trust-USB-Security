@@ -89,8 +89,6 @@ function Invoke-DailyBackup {
         $writer.Flush()
         $writer.Close()
         $fs.Close()
-
-        Write-Host "[BACKUP] $entryName → $year-$month.zip" -ForegroundColor Cyan
     }
     catch {
         Write-Host "[BACKUP ERROR] $_" -ForegroundColor Red
@@ -168,7 +166,6 @@ function Invoke-StartupBackupCheck {
                 $backupPath = Join-Path $LogDir $backupName
                 
                 Copy-Item $MainLogPath $backupPath -Force
-                Write-Host "[BACKUP] Saved $backupName (startup backup)" -ForegroundColor Cyan
                 
                 $fs = [System.IO.FileStream]::new($MainLogPath,
                     [System.IO.FileMode]::Create,

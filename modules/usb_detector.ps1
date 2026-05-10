@@ -51,8 +51,6 @@ function Invoke-USBLogWeeklyBackup {
 
         $timestamp = Get-Date -Format "MM/dd/yyyy HH:mm:ss"
         "=== USB Security Log Started at $timestamp ===" | Set-Content $LogFile -Encoding UTF8
-
-        Write-Host "[BACKUP] USB log → $zipName" -ForegroundColor Cyan
     }
     catch {
         Write-Host "[BACKUP ERROR] $_" -ForegroundColor Red

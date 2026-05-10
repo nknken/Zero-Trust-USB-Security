@@ -4,8 +4,8 @@ cls
 echo ===========================================
 echo    PILIH FUNGSI ZERO TRUST USB (CLI)
 echo ===========================================
-echo 1. Jalankan Monitoring Utama (FirstRun)
-echo 2. Buka Menu Utama (Main)
+echo 1. Jalankan Menu Registrasi (FirstRun)
+echo 2. Buka Menu Monitoring Utama (Main)
 echo 3. Unblock Perangkat
 echo 4. Remove dari Whitelist
 echo ===========================================
